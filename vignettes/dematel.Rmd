@@ -1,0 +1,126 @@
+---
+title: "dematel"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dematel.Rmd}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+This demonstration is prepared to give information about the usage of dematel package. 
+
+```{r setup}
+library(dematel)
+```
+
+This package contains `execute_dematel()`, `normalize()`, `total_relationship_matrix()`, `relationships_between_criteria()`, `visualize()`, `threshold_value()`, and `compare_criteria()` functions.  
+
+* `execute_dematel()` function runs dematel technique at once and reports the results.  
+* `normalize()` function normalizes the direct relationship decision matrix.  
+* `total_relationship_matrix()` returns the total relationship matrix of direct relationship decision matrix.  
+* `relationships_between_criteria()` returns a `data.frame` that contains total relationships between criteria.  
+* `visualize()` function visualizes the Causal Relations among the Criteria.  
+* `threshold_value()` function returns the threshold value of direct relationship decision matrix.  
+* `compare_criteria()` function returns relation results that exceed threshold value of direct relationship decision matrix.  
+
+
+There are 3 data sets in the package named `hospitaldata`, `nurseselection` and `medicaldevice` respectively. These data sets gathered from book of authors "Celikbilek Y., Ozdemir M. Multi-Criteria Decision Making Methods with Annotated and Comparative Health Sciences Practices, NOBEL Academic Publication, Ankara, 2020".
+
+In this demonstration `medicaldevice` data will be used.
+
+Medical Device Selection Data variables as follows;  
+
+* K1 - Numeric values of price   
+* K2 - Numeric values of ease of use  
+* K3 - Numeric values of 24/7 technical support  
+* K4 - Numeric values of technical service speed  
+* K5 - Numeric values of electrode quality  
+
+and the data set;
+
+```{r}
+my_data = dematel::medicaldevice
+
+my_data
+```
+
+
+With this data set, we can easily perform analysis using the functions included in the dematel package. The first function to use is the function called `normalize_data()`. `normalize_data()` has two parameters; first one is *data* and the second one is a *logical value* that checks whether data is matrix format. if data is not matris format then the function will not overwrite the names attribution as _C*_. The `medicaldevice` data set which has the structure of `data.frame` still can be used.
+
+```{r}
+normalize_data(my_data, data_control = F)
+```
+
+if `data_control` parameter of the function is set to `TRUE` than the function will transform data to matrix format and overwrite names attribute as  _C*_.
+
+```{r}
+normalize_data(my_data, data_control = T)
+```
+
+The second step of the dematel technique is to obtain the total direct relationship matrix by using the normalized matrix. The function `total_relationship_matrix()` is used to get the total direct relationship matrix.It is important that  `data_control` parameter of the function should set to `TRUE`, otherwise function throws and error.
+
+```{r}
+total_relationship_matrix(my_data, data_control = T)
+```
+
+`data_control` parameter of the function is pre-defined as `TRUE`.
+
+```{r}
+total_relationship_matrix(my_data)
+```
+
+The third stage of the dematel tecnique is to obtain the relationship matrix between criteria. The `relationships_between_criteria()` is used to obtain the relationship matrix between criteria. By means of this function, the importance of the criteria and the situations of influence between each other are determined. `(c+r)` serves to determine the importance of the criteria. `(c-r)` is used in determining the impact of the criteria. If `(c-r) <0` for a criterion, it is determined that it is affected by other criteria. Unlike; If `(c-r)> 0` for a criterion, it is determined that it has an effect on other criteria. `relationships_between_criteria()` returns a `data.frame`.
+
+Also this function has two parameters as aformentioned above `data` and `data_control`. `data_control` parameter of the function is pre-defined as `TRUE`.
+
+```{r}
+relationships_between_criteria(my_data, data_control = T)
+```
+
+The causal diagram is used to see and examine the significance and impact of the criteria more clearly. The causal diagram can be obtained with the `visualize()` function in the package.  
+
+Also this function has two parameters as aformentioned above `data` and `data_control`. `data_control` parameter of the function is pre-defined as `TRUE`.
+
+```{r}
+visualize(my_data)
+```
+
+In the diagram above, the criteria below the zero line of y axis for $c_i-r_i$ are the criteria **C2, and C3**, affected by the **C1, C4, and C5**. The criteria above the zero line of y axis for $c_i-r_i$ are the criteria **C1, C4, and C5** that predominantly affect **C2, and C3** criteria. On the $c_i+r_i$ axis the importance of the criterion increases as you move away from zero.
+
+
+The next step in the dematel technique is to create the network structure. The `threshold_value()` function is used to determine the threshold value. Also this function has two parameters as aformentioned above `data` and `data_control`. `data_control` parameter of the function is pre-defined as `TRUE`.
+
+```{r}
+threshold_value(my_data)
+```
+
+The last step of the dematel technique is to obtain comparisons. With the  `compare_criteria()` function,  relationships that exceed the threshold value in the total relationship matrix can be revealed
+
+```{r}
+compare_criteria(my_data)
+```
+When the results are compared, values equal to or above the threshold value, indicate which criterion has an effect on which criteria. For instance the criterion `C2` has affect on `C1` with the value of 0.4110676.
+
+dematel package has one more function called `execute_dematel()`. This function This function executes all functions, conducts dematel analysis at once and returns
+
+- a `matrix` that contains data,  
+- a `matrix` that contains normalized data,  
+- a `matrix` that contains normalized initial direct-relation matrix,  
+- a `data.frame` that contains relationships between criteria,  
+- a `graph`,  
+- a `num` that contains threshold value,  
+- a `list` of criteria comparisons.  
+
+`execute_dematel()` function has one parameter `x`. it automatically checks data type. if the data type is not matrix format then it converts it to matrix and renames the names attributes as _C*_.
+
+```{r}
+execute_dematel(my_data)
+```

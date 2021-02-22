@@ -1,0 +1,19 @@
+#' Nurse Selection Data
+#'
+#' A dataset containing nurse selection problem data.
+#' This data set gathered from Celikbilek Y., Ozdemir M. Cok Kriterli Karar Verme
+#' Teknikleri Aciklamali ve Karsilastirmali Saglik Bilimleri Uygulamalari ile,
+#' pp. 12, NOBEL Akademik Yayincilik, Ankara, 2020.
+#'
+#' @format A data frame of 8 rows and 8 columns
+#' \describe{
+#'  \item{K1}{Numeric values of graduation success}
+#'  \item{K2}{Numeric values of overall success of the school she/he graduated from}
+#'  \item{K3}{Numeric values of total experience time}
+#'  \item{K4}{Numeric values of surgical and operating room nursing experience time}
+#'  \item{K5}{Numeric values of personality inventory result}
+#'  \item{K6}{Numeric values of communication ability result}
+#'  \item{K7}{Numeric values of coordination ability result}
+#'  \item{K8}{Numeric values of foreign language level}
+#' }
+"nurseselection"
